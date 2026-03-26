@@ -1,0 +1,11 @@
+/__pycache__
+*.pyc
+*.pyo
+# Ignore node_modules and build artifacts
+/node_modules
+/build
+.env
+__init__.py
+__pycache__/
+*.pyc
+venv/
