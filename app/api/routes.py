@@ -12,13 +12,10 @@ router = APIRouter()
 @router.get("/research")
 def research(topic: str):
     raw_text = scrape_wikipedia(topic)
-    tokens = preprocess_pipeline(raw_text)
 
     return {
         "topic": topic,
-        "raw_length": len(raw_text),
-        "tokens_count": len(tokens),
-        "sample_tokens": tokens[:50]
+        "preview": raw_text[:1200]  # 🔥 clean readable text
     }
 
 
@@ -62,7 +59,14 @@ def search(topic: str, query: str):
 
 @router.get("/teach")
 def teach(topic: str):
+    topic = topic.strip().lower().replace(" ", "_")  # normalize
+
     raw_text = scrape_wikipedia(topic)
+
+    if not raw_text or len(raw_text) < 50:
+        return {
+            "error": "Could not fetch valid data. Try a different topic."
+        }
 
     content = generate_teaching_content(topic, raw_text)
 
